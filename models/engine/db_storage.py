@@ -35,12 +35,23 @@ class DBStorage:
         if getenv('HBNB_MYSQL_ENV', 'not') == 'test':
             Base.metadata.drop_all(self.__engine)
 
-    @property
-    def available_classes(self):
+    def count(self, cls=None):
         """
-        Returns Available classes
+        return the number of objects (in a class if one is given)
         """
-        return (self.__models_available)
+        if cls is None:
+            return len(self.all())
+        return len(self.all(cls))
+
+    def get(self, cls, id):
+        """
+        get an object based on its class and id
+        """
+        obj = self.all(cls)
+        try:
+            return obj[id]
+        except:
+            return None
 
     def all(self, cls=None):
         """
@@ -64,42 +75,11 @@ class DBStorage:
         """
         self.__session.add(obj)
 
-    def get(self, cls, id):
-        """
-        gets an object of a certain kind of class
-        """
-        if cls not in self.__models_available.keys():
-            return (None)
-        for class_instance in self.__session.query(
-                self.__models_available[cls]):
-            if class_instance.__dict__['id'] == id:
-                return (class_instance)
-        print("ERROR: Instance ID does not exist")
-        return (None)
-
-    def count(self, cls=None):
-        """
-        counts the number of instances of a class (cls)
-        """
-        if cls is not None:
-            if self.__models_available.get(cls) is not None:
-                return(len(self.all(cls)))
-        else:
-            return(len(self.all()))
-
     def save(self):
         """
         saves the objects fom the current session
         """
         self.__session.commit()
-
-    def reload(self):
-        """
-        WARNING!!!! I'm not sure if Base.metadata.create_all needs to
-        be in the init method
-        """
-        Base.metadata.create_all(self.__engine)
-        self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
 
     def delete(self, obj=None):
         """
@@ -107,6 +87,15 @@ class DBStorage:
         """
         if obj is not None:
             self.__session.delete(obj)
+
+    def reload(self):
+        """
+        WARNING!!!! I'm not sure if Base.metadata.create_all needs to
+        be in the init method
+        """
+        Base.metadata.create_all(self.__engine)
+        self.__session = scoped_session(sessionmaker(bind=self.__engine,
+                                                     expire_on_commit=False))
 
     def close(self):
         """
