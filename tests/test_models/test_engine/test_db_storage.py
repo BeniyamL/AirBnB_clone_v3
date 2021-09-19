@@ -49,6 +49,15 @@ class Test_DBStorage(unittest.TestCase):
         self.store.reload()
         self.assertEqual(len(self.store.all()), self.test_len + 2)
 
+    def test_get(self):
+        a = Amenity(name='one')
+        output = self.store.get('Amenity', a.id)
+        self.assertTrue(a.id in output)
+
+    def test_count(self):
+        output = self.store.count('Amenity')
+        assertEqual(output, len(self.store.all('Amenity')))
+
     def test_save(self):
         test_len = len(self.store.all())
         a = Amenity(name="another")
