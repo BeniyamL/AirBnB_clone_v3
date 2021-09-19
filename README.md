@@ -155,7 +155,7 @@ No known bugs at this time.
 
 ## Authors
 Amanuel Awol - [Github](https://github.com/Emanuel-js)  
-
+Beniyam Legesse -[Github](https://github.com/BeniyamL)
 
 Second part of Airbnb: Joann Vuong
 ## License
