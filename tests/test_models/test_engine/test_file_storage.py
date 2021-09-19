@@ -31,15 +31,6 @@ class Test_FileStorage(unittest.TestCase):
     def test_all(self):
         self.assertEqual(len(self.store.all()), self.test_len)
 
-    def test_get(self):
-        a = Amenity(name='internet')
-        output = self.store.get('Amenity', a.id)
-        assertTrue(a.id in output)
-
-    def test_count(self):
-        output = self.store.count('Amenity')
-        assertEqual(output, len(self.store.all('Amenity')))
-
     def test_new(self):
         # note: we cannot assume order of test is order written
         test_len = len(self.store.all())

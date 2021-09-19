@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
 This is module file_storage
+
 This module defines one class FileStorage.
 This class hadles saving the information in json in a file
 """
@@ -20,9 +21,11 @@ import os
 class FileStorage:
     """
     Stores objects in a file in a json format
+
     **Class Attributes**
         __file_path: private, the path/to/file
         __objects: private, a dictionary of all the objects
+
     **Instance Attributes**
         __models_available: private, classes currently handled
     """
@@ -39,27 +42,17 @@ class FileStorage:
                                    "State": State}
         self.reload()
 
-    def count(self, cls=None):
+    @property
+    def available_classes(self):
         """
-        count the number of objects (in a class if given)
+        Returns Available classes
         """
-        if cls is None:
-            return len(self.all())
-        return len(self.all(cls))
-
-    def get(self, cls, id):
-        """
-        get a specific object using class and id
-        """
-        obj = all(cls)
-        try:
-            return obj[id]
-        except:
-            return None
+        return (self.__models_available)
 
     def all(self, cls=None):
         """
         Returns the required objects
+
         **Arguments**
             cls: not required, a valid Class Name
         """
@@ -67,22 +60,49 @@ class FileStorage:
             return FileStorage.__objects
         else:
             result = {}
-            for k, v in FileStorage.__objects.items():
-                if v.__class__.__name__ == cls:
-                    result[k] = v
+            for index, item in FileStorage.__objects.items():
+                if item.__class__.__name__ == cls:
+                    result[index] = item
             return result
 
     def new(self, obj):
         """
         Adds a new object to __objects
+
         **Arguments**
             obj: an object
         """
         if obj is not None:
             FileStorage.__objects[obj.id] = obj
 
+    def get(self, cls, id):
+        """
+        get an object from the json file
+        returns none if cls or id is not found in the json file
+        """
+        if cls not in FileStorage.__objects.items():
+            return(None)
+        for cls_instance in FileStorage.__objects.items():
+            if cls_instance['id'] == id:
+                return(class_instance)
+        return(None)
+
+    def count(self, cls=None):
+        """
+        Count the number of objects that belong to a class
+        Defaults to None, which returns a
+        count of all objects in the json file
+        """
+        if cls is not None:
+            if cls in FileStorage.__objects.items():
+                return(len(self.all(cls)))
+        else:
+            return(len(self.all()))
+
     def save(self):
-        """puts all the object to file after serializing them"""
+        """
+        Saves objects to a json formatted file
+        """
         store = {}
         for k in FileStorage.__objects.keys():
             store[k] = FileStorage.__objects[k].to_json()
