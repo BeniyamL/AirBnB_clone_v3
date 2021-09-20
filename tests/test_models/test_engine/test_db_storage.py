@@ -69,5 +69,36 @@ class Test_DBStorage(unittest.TestCase):
         for value in self.store.all().values():
             self.assertIsInstance(value.created_at, datetime)
 
+    def test_get(self):
+        """ Test method for get method (retrieve one object) """
+        storage = DBStorage()
+        test_dct = {"name": 'Jimma'}
+        new_obj = State(**test_dct)
+        storage.new(new_obj)
+        storage.save()
+        get_obj = storage.get(State, new_obj.id)
+        if get_obj:
+            self.assertEqual(get_obj.id, new_obj.id)
+
+    def test_count_classes(self):
+        """ Test method for count method(count the number of the given cls) """
+        storage = DBStorage()
+        for cls in classes.values():
+            obj_count = storage.count(cls)
+            if obj_count:
+                self.assertEqual(len(storage.all(cls)), obj_count)
+            else:
+                self.assertEqual(len(storage.all(cls)), 0)
+
+    def test_count(self):
+        """ Test method for count method(count the number of objects) """
+        storage = DBStorage()
+        obj_count = storage.count()
+        if obj_count:
+            self.assertEqual(len(storage.all()), obj_count)
+        else:
+            self.assertEqual(len(storage.all()), 0)
+
+
 if __name__ == "__main__":
     unittest.main()

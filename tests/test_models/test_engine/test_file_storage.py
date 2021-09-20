@@ -4,6 +4,10 @@ from datetime import datetime
 from models.engine.file_storage import FileStorage
 from models import *
 
+FileStorage = file_storage.FileStorage
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
+
 
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db',
                  "db does not have FileStorage")
@@ -63,6 +67,43 @@ class Test_FileStorage(unittest.TestCase):
     def test_state(self):
         """test State creation with an argument"""
         pass
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db',
+                     "db does not have FileStorage")
+    def test_get(self):
+        """ Test method for get method (retrieve one object) """
+        storage = FileStorage()
+        test_dct = {"name": 'Jimma'}
+        new_obj = State(**test_dct)
+        storage.new(new_obj)
+        storage.save()
+        get_obj = storage.get(State, new_obj.id)
+        if get_obj:
+            self.assertEqual(get_obj.id, new_obj.id)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db',
+                     "db does not have FileStorage")
+    def test_count_classes(self):
+        """ Test method for count method(count the number of the given cls) """
+        storage = FileStorage()
+        for cls in classes.values():
+            obj_count = storage.count(cls)
+            if obj_count:
+                self.assertEqual(len(storage.all(cls)), obj_count)
+            else:
+                self.assertEqual(len(storage.all(cls)), 0)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db',
+                     "db does not have FileStorage")
+    def test_count(self):
+        """ Test method for count method(count the number of objects) """
+        storage = FileStorage()
+        obj_count = storage.count()
+        if obj_count:
+            self.assertEqual(len(storage.all()), obj_count)
+        else:
+            self.assertEqual(len(storage.all()), 0)
+
 
 if __name__ == "__main__":
     import sys
