@@ -4,10 +4,6 @@ from datetime import datetime
 from models.engine.file_storage import FileStorage
 from models import *
 
-FileStorage = file_storage.FileStorage
-classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
-
 
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db',
                  "db does not have FileStorage")
