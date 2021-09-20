@@ -68,14 +68,11 @@ class DBStorage:
         """
         gets an object of a certain kind of class
         """
-        if cls not in self.__models_available.keys():
-            return (None)
-        for class_instance in self.__session.query(
-                self.__models_available[cls]):
-            if class_instance.__dict__['id'] == id:
-                return (class_instance)
-        print("ERROR: Instance ID does not exist")
-        return (None)
+        if cls and id:
+            rqrd_obj = cls.__name__ + '.' + id
+            all_obj = self.all(cls)
+            return all_obj.get(rqrd_obj)
+        return None
 
     def count(self, cls=None):
         """
