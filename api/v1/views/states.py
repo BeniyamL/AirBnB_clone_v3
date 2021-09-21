@@ -44,9 +44,9 @@ def state_by_id(state_id=None):
     - PUT: Updates the state object
     - GET: Default, return the state object.
     """
-    if state_id not in storage.all('State'):
+    state = storage.get('State', state_id)
+    if state is None:
         abort(404)
-
     if request.method == 'DELETE':
         storage.delete(storage.get('State', state_id))
         storage.save()
