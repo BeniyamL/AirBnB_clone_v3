@@ -12,6 +12,8 @@ from models.state import State
 """
 This is the db_storage module
 """
+classes = {"Amenity": Amenity, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class DBStorage:
@@ -46,17 +48,14 @@ class DBStorage:
         """
         returns a dictionary of all the class objects
         """
-        orm_objects = {}
-        if cls:
-            for k in self.__session.query(self.__models_available[cls]):
-                orm_objects[k.__dict__['id']] = k
-        else:
-            for i in self.__models_available.values():
-                j = self.__session.query(i).all()
-                if j:
-                    for k in j:
-                        orm_objects[k.__dict__['id']] = k
-        return orm_objects
+        new_dict = {}
+        for clss in classes:
+            if cls is None or cls is classes[clss] or cls is clss:
+                objs = self.__session.query(classes[clss]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+        return (new_dict)
 
     def new(self, obj):
         """

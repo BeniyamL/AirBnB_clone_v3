@@ -6,6 +6,7 @@ from models import *
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
+
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db',
                  "db does not have FileStorage")
 class Test_FileStorage(unittest.TestCase):

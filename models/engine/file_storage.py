@@ -61,7 +61,7 @@ class FileStorage:
         else:
             result = {}
             for index, item in FileStorage.__objects.items():
-                if item.__class__.__name__ == cls:
+                if item.__class__.__name__ == cls or item.__class__ == cls:
                     result[index] = item
             return result
 
