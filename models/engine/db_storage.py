@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+This is the db_storage module
+"""
+
 from models.base_model import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import (sessionmaker, scoped_session)
@@ -9,9 +13,7 @@ from models.city import City
 from models.place import Place
 from models.review import Review
 from models.state import State
-"""
-This is the db_storage module
-"""
+
 classes = {"Amenity": Amenity, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
