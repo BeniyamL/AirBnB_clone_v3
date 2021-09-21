@@ -8,3 +8,11 @@ print("State objects: {}".format(storage.count("State")))
 
 first_state_id = list(storage.all("State").keys())[0]
 print("First state: {}".format(storage.get("State", first_state_id)))
+
+
+print("All objects: {}".format(storage.count()))
+print("City objects: {}".format(storage.count("City")))
+
+first_state_id = list(storage.all("City").keys())[0]
+print("First city: {}".format(storage.get("City", first_state_id)))
+
