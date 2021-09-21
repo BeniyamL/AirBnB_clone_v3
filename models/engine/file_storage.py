@@ -16,6 +16,10 @@ from models.review import Review
 from models.state import State
 # from models import storage
 import os
+import models
+
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class FileStorage:
@@ -80,11 +84,12 @@ class FileStorage:
         get an object from the json file
         returns none if cls or id is not found in the json file
         """
-        if cls not in FileStorage.__objects.items():
+        if cls not in classes.values():
             return(None)
-        for cls_instance in FileStorage.__objects.items():
-            if cls_instance['id'] == id:
-                return(class_instance)
+        all_cls = models.storage.all(cls)
+        for cls_instance in all_cls.values():
+            if cls_instance.id == id:
+                return(cls_instance)
         return(None)
 
     def count(self, cls=None):
@@ -93,11 +98,7 @@ class FileStorage:
         Defaults to None, which returns a
         count of all objects in the json file
         """
-        if cls is not None:
-            if cls in FileStorage.__objects.items():
-                return(len(self.all(cls)))
-        else:
-            return(len(self.all()))
+        return(len(self.all(cls)))
 
     def save(self):
         """
